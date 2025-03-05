@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BitonicSort/cl/context.hpp"
+#include "BitonicSort/cl/command_queue.hpp"
 #include <iostream>
 
 namespace bitonic_sort {
@@ -13,7 +13,8 @@ namespace bitonic_sort {
 
     template <sortable_elem_t ElemT>
     void bitonic_sort(std::vector<ElemT> &data) {
-        platform_t platform;
-        context_t context(platform);
+        bitonic_sort::device_t        device;
+        bitonic_sort::context_t       context{device};
+        bitonic_sort::command_queue_t command_queue{context};
     }
 }

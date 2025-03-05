@@ -1,7 +1,6 @@
 #pragma once
 
 #include "BitonicSort/cl/cl.hpp"
-#include <iostream>
 
 namespace bitonic_sort {
     class platform_t final : public detail::wrapper_t<cl_platform_id> {
@@ -28,8 +27,8 @@ namespace bitonic_sort {
     public:
         platform_t() : detail::wrapper_t<cl_platform_id>(select_platform()) {}
 
-        platform_t(const platform_t& platform, bool is_retain = false)
-        : detail::wrapper_t<cl_platform_id>(platform.obj(), is_retain) {}
+        platform_t(const platform_t& platform)
+        : detail::wrapper_t<cl_platform_id>(platform.obj_) {}
 
         template <cl_platform_info platform_name>
         typename detail::param_traits<cl_platform_info, platform_name>::type 
@@ -37,4 +36,17 @@ namespace bitonic_sort {
             return wrapper_get_info<platform_name>();
         }
     };
+
+    inline std::ostream& operator<<(std::ostream& os, platform_t& platform) {
+        os << print_blue("platform\n");
+        os << print_blue("\tCL_PLATFORM_NAME: ") <<
+              print_lcyan(platform.get_info<CL_PLATFORM_NAME>() << "\n");
+        os << print_blue("\tCL_PLATFORM_PROFILE: ") <<
+              print_lcyan(platform.get_info<CL_PLATFORM_PROFILE>() << "\n");
+        os << print_blue("\tCL_PLATFORM_VERSION: ") <<
+              print_lcyan(platform.get_info<CL_PLATFORM_VERSION>() << "\n");
+        os << print_blue("\tCL_PLATFORM_VENDOR: ") <<
+              print_lcyan(platform.get_info<CL_PLATFORM_VENDOR>());
+        return os;
+    }
 }

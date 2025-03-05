@@ -65,24 +65,24 @@ namespace bitonic_sort::detail {
         static cl_int release(cl_platform_id platform) { return 0; }
     };
 
-    template <> struct ReferenceHandler<cl_context> {
-        static cl_int retain (cl_context context) { return ::clRetainContext (context); }
-        static cl_int release(cl_context context) { return ::clReleaseContext(context); }
-    };
-
-    template <> struct ReferenceHandler<cl_program> {
-        static cl_int retain (cl_program program) { return ::clRetainProgram (program); }
-        static cl_int release(cl_program program) { return ::clReleaseProgram(program); }
-    };
-
     template <> struct ReferenceHandler<cl_device_id> {
         static cl_int retain (cl_device_id device) { return ::clRetainDevice (device); }
         static cl_int release(cl_device_id device) { return ::clReleaseDevice(device); }
     };
 
+    template <> struct ReferenceHandler<cl_context> {
+        static cl_int retain (cl_context context) { return ::clRetainContext (context); }
+        static cl_int release(cl_context context) { return ::clReleaseContext(context); }
+    };
+
     template <> struct ReferenceHandler<cl_command_queue> {
         static cl_int retain (cl_command_queue command_queue) { return ::clRetainCommandQueue (command_queue); }
         static cl_int release(cl_command_queue command_queue) { return ::clReleaseCommandQueue(command_queue); }
+    };
+
+    template <> struct ReferenceHandler<cl_program> {
+        static cl_int retain (cl_program program) { return ::clRetainProgram (program); }
+        static cl_int release(cl_program program) { return ::clReleaseProgram(program); }
     };
 
     template <> struct ReferenceHandler<cl_kernel> {
@@ -101,8 +101,16 @@ namespace bitonic_sort::detail {
         static constexpr auto get_info_func = &clGetPlatformInfo;;
     };
 
+    struct device_type {
+        static constexpr auto get_info_func = &clGetDeviceInfo;
+    };
+
     struct context_type {
         static constexpr auto get_info_func = &clGetContextInfo;;
+    };
+
+    struct command_queue_type {
+        static constexpr auto get_info_func = &clGetCommandQueueInfo;;
     };
 
     template <typename T, cl_int NameT> struct param_traits {};
@@ -139,12 +147,63 @@ namespace bitonic_sort::detail {
         static type to_type(std::string &str) { return str; }
     };
 
+     /*------------------------------------------------------------------------------------------*/
+
+     template<> struct param_traits<cl_device_info, CL_DEVICE_TYPE> : public device_type {
+        enum { value = CL_DEVICE_TYPE };
+        using type = cl_device_type;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+
+    template<> struct param_traits<cl_device_info, CL_DEVICE_VENDOR_ID> : public device_type {
+        enum { value = CL_DEVICE_VENDOR_ID };
+        using type = cl_uint;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+
+    template<> struct param_traits<cl_device_info, CL_DEVICE_MAX_COMPUTE_UNITS> : public device_type {
+        enum { value = CL_DEVICE_MAX_COMPUTE_UNITS };
+        using type = cl_uint;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+
+    template<> struct param_traits<cl_device_info, CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS> : public device_type {
+        enum { value = CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS };
+        using type = cl_uint;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+
+    template<> struct param_traits<cl_device_info, CL_DEVICE_MAX_WORK_ITEM_SIZES> : public device_type {
+        enum { value = CL_DEVICE_MAX_WORK_ITEM_SIZES };
+        using type = std::vector<size_t>;
+        static type to_type(std::string &str) {
+            type result(str.size() / sizeof(size_t));
+            std::memcpy(result.data(), str.data(), str.size());
+            return result;
+        }
+    };
+
+    template<> struct param_traits<cl_device_info, CL_DEVICE_MAX_WORK_GROUP_SIZE> : public device_type {
+        enum { value = CL_DEVICE_MAX_WORK_GROUP_SIZE };
+        using type = size_t;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+
     /*------------------------------------------------------------------------------------------*/
 
     template<> struct param_traits<cl_context_info, CL_CONTEXT_REFERENCE_COUNT> : public context_type {
         enum { value = CL_CONTEXT_REFERENCE_COUNT };
         using type = unsigned int;
-
         static type to_type(std::string &str) {
             type result;
             std::copy_n(str.data(), sizeof(type), reinterpret_cast<char*>(&result));
@@ -155,7 +214,6 @@ namespace bitonic_sort::detail {
     template<> struct param_traits<cl_context_info, CL_CONTEXT_NUM_DEVICES> : public context_type {
         enum { value = CL_CONTEXT_NUM_DEVICES };
         using type = unsigned int;
-
         static type to_type(std::string &str) {
             type result;
             std::copy_n(str.data(), sizeof(type), reinterpret_cast<char*>(&result));
@@ -166,7 +224,6 @@ namespace bitonic_sort::detail {
     template<> struct param_traits<cl_context_info, CL_CONTEXT_DEVICES> : public context_type {
         enum { value = CL_CONTEXT_DEVICES };
         using type = std::vector<cl_device_id>;
-
         static type to_type(std::string &str) {
             type devices;
             devices.resize(str.size() / sizeof(cl_device_id));
@@ -182,7 +239,6 @@ namespace bitonic_sort::detail {
     template<> struct param_traits<cl_context_info, CL_CONTEXT_PROPERTIES> : public context_type {
         enum { value = CL_CONTEXT_PROPERTIES };
         using type = std::vector<cl_context_properties>;
-
         static type to_type(std::string &str) {
             type properties;
             properties.resize(str.size() / sizeof(cl_context_properties));
@@ -197,10 +253,46 @@ namespace bitonic_sort::detail {
 
     /*------------------------------------------------------------------------------------------*/
 
+    template<> struct param_traits<cl_command_queue_info, CL_QUEUE_CONTEXT> : public command_queue_type {
+        enum { value = CL_QUEUE_CONTEXT };
+        using type = cl_context;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+
+    template<> struct param_traits<cl_command_queue_info, CL_QUEUE_DEVICE> : public command_queue_type {
+        enum { value = CL_QUEUE_DEVICE };
+        using type = cl_device_id;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+
+    template<> struct param_traits<cl_command_queue_info, CL_QUEUE_REFERENCE_COUNT> : public command_queue_type {
+        enum { value = CL_QUEUE_REFERENCE_COUNT };
+        using type = cl_uint;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+
+    template<> struct param_traits<cl_command_queue_info, CL_QUEUE_PROPERTIES> : public command_queue_type {
+        enum { value = CL_QUEUE_PROPERTIES };
+        using type = cl_command_queue_properties;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+
+    /*------------------------------------------------------------------------------------------*/
+
     template<typename ObjT> struct obj_info_type;
     
-    template<> struct obj_info_type<cl_platform_id> { using type = cl_platform_info; };
-    template<> struct obj_info_type<cl_context>     { using type = cl_context_info;  };
+    template<> struct obj_info_type<cl_platform_id>   { using type = cl_platform_info;      };
+    template<> struct obj_info_type<cl_device_id>     { using type = cl_device_info;        };
+    template<> struct obj_info_type<cl_context>       { using type = cl_context_info;       };
+    template<> struct obj_info_type<cl_command_queue> { using type = cl_command_queue_info; };
 
     /*------------------------------------------------------------------------------------------*/
 
@@ -216,15 +308,13 @@ namespace bitonic_sort::detail {
             retain();
         }
 
-        wrapper_t(const wrapper_t &rhs, bool is_retain = false) {
+        wrapper_t(const wrapper_t &rhs) {
             if (this == &rhs)
                 return;
 
             release();
             obj_ = rhs.obj_;
-
-            if (is_retain)
-                retain();
+            retain();
         }
 
         wrapper_t &operator=(const wrapper_t &rhs) {

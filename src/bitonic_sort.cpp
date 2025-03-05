@@ -11,6 +11,7 @@ int main(int argc, char* argv[]) {
         bitonic_sort::context_t       context{device};
         bitonic_sort::command_queue_t command_queue{context};
         bitonic_sort::program_t       program(context, kernel_file);
+        bitonic_sort::kernel_t        kernel(program, command_queue, "");
 
     } catch (cl::Error& error) {
         std::cout << error.what() << "\n";

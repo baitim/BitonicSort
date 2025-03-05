@@ -117,6 +117,10 @@ namespace bitonic_sort::detail {
         static constexpr auto get_info_func = &clGetProgramInfo;
     };
 
+    struct kernel_type {
+        static constexpr auto get_info_func = &clGetKernelInfo;
+    };
+
     template <typename T, cl_int NameT> struct param_traits {};
 
     /*------------------------------------------------------------------------------------------*/
@@ -364,6 +368,52 @@ namespace bitonic_sort::detail {
     };
 
     /*------------------------------------------------------------------------------------------*/
+    
+    template<> struct param_traits<cl_kernel_info, CL_KERNEL_FUNCTION_NAME> : public kernel_type {
+        enum { value = CL_KERNEL_FUNCTION_NAME };
+        using type = std::string;
+        static type to_type(std::string &str) { return str; }
+    };
+    
+    template<> struct param_traits<cl_kernel_info, CL_KERNEL_NUM_ARGS> : public kernel_type {
+        enum { value = CL_KERNEL_NUM_ARGS };
+        using type = cl_uint;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+    
+    template<> struct param_traits<cl_kernel_info, CL_KERNEL_REFERENCE_COUNT> : public kernel_type {
+        enum { value = CL_KERNEL_REFERENCE_COUNT };
+        using type = cl_uint;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+    
+    template<> struct param_traits<cl_kernel_info, CL_KERNEL_CONTEXT> : public kernel_type {
+        enum { value = CL_KERNEL_CONTEXT };
+        using type = cl_context;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+    
+    template<> struct param_traits<cl_kernel_info, CL_KERNEL_PROGRAM> : public kernel_type {
+        enum { value = CL_KERNEL_PROGRAM };
+        using type = cl_program;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+    
+    template<> struct param_traits<cl_kernel_info, CL_KERNEL_ATTRIBUTES> : public kernel_type {
+        enum { value = CL_KERNEL_ATTRIBUTES };
+        using type = std::string;
+        static type to_type(std::string &str) { return str; }
+    };
+
+    /*------------------------------------------------------------------------------------------*/
 
     template<typename ObjT> struct obj_info_type;
     
@@ -372,6 +422,7 @@ namespace bitonic_sort::detail {
     template<> struct obj_info_type<cl_context>       { using type = cl_context_info;       };
     template<> struct obj_info_type<cl_command_queue> { using type = cl_command_queue_info; };
     template<> struct obj_info_type<cl_program>       { using type = cl_program_info;       };
+    template<> struct obj_info_type<cl_kernel>        { using type = cl_kernel_info;       };
 
     /*------------------------------------------------------------------------------------------*/
 

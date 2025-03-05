@@ -12,8 +12,8 @@ namespace bitonic_sort {
             cl_handler(clCreateCommandQueue, context.obj(), context.device().obj(), 0, nullptr)
         ), context_(context) {}
 
-        command_queue_t(const command_queue_t& rhs)
-        : detail::wrapper_t<cl_command_queue>(rhs), context_(rhs.context_) {}
+        command_queue_t(const command_queue_t& command_queue)
+        : detail::wrapper_t<cl_command_queue>(command_queue.obj_), context_(command_queue.context_) {}
 
         const context_t& context() const { return context_; }
 

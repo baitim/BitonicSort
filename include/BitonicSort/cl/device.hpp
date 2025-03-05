@@ -12,7 +12,7 @@ namespace bitonic_sort {
         }
 
         device_t(const device_t& device)
-        : detail::wrapper_t<cl_device_id>(device.obj_) {}
+        : detail::wrapper_t<cl_device_id>(device.obj_), platform_(device.platform_) {}
 
         template <cl_device_info device_name>
         typename detail::param_traits<cl_device_info, device_name>::type 

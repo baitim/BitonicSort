@@ -16,6 +16,9 @@ namespace bitonic_sort {
             cl_handler(clBuildProgram, obj_, 1, &context_.device()(), nullptr, nullptr, nullptr);
         }
 
+        program_t(const program_t& program)
+        : detail::wrapper_t<cl_program>(program.obj_), context_(program.context_) {}
+
         const context_t& context() const { return context_; }
 
         template <cl_program_info program_name>

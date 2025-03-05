@@ -25,7 +25,7 @@ namespace bitonic_sort {
         : detail::wrapper_t<cl_context>(get_gpu_context(device.obj())), device_(device) {}
 
         context_t(const context_t& context)
-        : detail::wrapper_t<cl_context>(context.obj_), device_(context.device()) {}
+        : detail::wrapper_t<cl_context>(context.obj_), device_(context.device_) {}
 
         const device_t& device() const { return device_; }
 

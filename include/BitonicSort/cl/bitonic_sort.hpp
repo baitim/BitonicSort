@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BitonicSort/cl/command_queue.hpp"
+#include "BitonicSort/cl/program.hpp"
 #include <iostream>
 
 namespace bitonic_sort {

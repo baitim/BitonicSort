@@ -98,7 +98,7 @@ namespace bitonic_sort::detail {
     /*------------------------------------------------------------------------------------------*/
 
     struct platform_type {
-        static constexpr auto get_info_func = &clGetPlatformInfo;;
+        static constexpr auto get_info_func = &clGetPlatformInfo;
     };
 
     struct device_type {
@@ -106,11 +106,15 @@ namespace bitonic_sort::detail {
     };
 
     struct context_type {
-        static constexpr auto get_info_func = &clGetContextInfo;;
+        static constexpr auto get_info_func = &clGetContextInfo;
     };
 
     struct command_queue_type {
-        static constexpr auto get_info_func = &clGetCommandQueueInfo;;
+        static constexpr auto get_info_func = &clGetCommandQueueInfo;
+    };
+
+    struct program_type {
+        static constexpr auto get_info_func = &clGetProgramInfo;
     };
 
     template <typename T, cl_int NameT> struct param_traits {};
@@ -286,6 +290,80 @@ namespace bitonic_sort::detail {
     };
 
     /*------------------------------------------------------------------------------------------*/
+    
+      template<> struct param_traits<cl_program_info, CL_PROGRAM_REFERENCE_COUNT> : public program_type {
+        enum { value = CL_PROGRAM_REFERENCE_COUNT };
+        using type = cl_uint;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+    
+    template<> struct param_traits<cl_program_info, CL_PROGRAM_CONTEXT> : public program_type {
+        enum { value = CL_PROGRAM_CONTEXT };
+        using type = cl_context;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+    
+    template<> struct param_traits<cl_program_info, CL_PROGRAM_NUM_DEVICES> : public program_type {
+        enum { value = CL_PROGRAM_NUM_DEVICES };
+        using type = cl_uint;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+    
+    template<> struct param_traits<cl_program_info, CL_PROGRAM_DEVICES> : public program_type {
+        enum { value = CL_PROGRAM_DEVICES };
+        using type = std::vector<cl_device_id>;
+        static type to_type(std::string &str) {
+            type devices(str.size() / sizeof(cl_device_id));
+            std::memcpy(devices.data(), str.data(), str.size());
+            return devices;
+        }
+    };
+    
+    template<> struct param_traits<cl_program_info, CL_PROGRAM_SOURCE> : public program_type {
+        enum { value = CL_PROGRAM_SOURCE };
+        using type = std::string;
+        static type to_type(std::string &str) { return str; }
+    };
+    
+    template<> struct param_traits<cl_program_info, CL_PROGRAM_BINARY_SIZES> : public program_type {
+        enum { value = CL_PROGRAM_BINARY_SIZES };
+        using type = std::vector<size_t>;
+        static type to_type(std::string &str) {
+            type sizes(str.size() / sizeof(size_t));
+            std::memcpy(sizes.data(), str.data(), str.size());
+            return sizes;
+        }
+    };
+    
+    template<> struct param_traits<cl_program_info, CL_PROGRAM_BINARIES> : public program_type {
+        enum { value = CL_PROGRAM_BINARIES };
+        using type = std::vector<std::vector<unsigned char>>;
+        static type to_type(std::string &str) {
+            return {std::vector<unsigned char>(str.begin(), str.end())};
+        }
+    };
+    
+    template<> struct param_traits<cl_program_info, CL_PROGRAM_NUM_KERNELS> : public program_type {
+        enum { value = CL_PROGRAM_NUM_KERNELS };
+        using type = cl_uint;
+        static type to_type(std::string &str) {
+            return *reinterpret_cast<const type*>(str.data());
+        }
+    };
+    
+    template<> struct param_traits<cl_program_info, CL_PROGRAM_KERNEL_NAMES> : public program_type {
+        enum { value = CL_PROGRAM_KERNEL_NAMES };
+        using type = std::string;
+        static type to_type(std::string &str) { return str; }
+    };
+
+    /*------------------------------------------------------------------------------------------*/
 
     template<typename ObjT> struct obj_info_type;
     
@@ -293,6 +371,7 @@ namespace bitonic_sort::detail {
     template<> struct obj_info_type<cl_device_id>     { using type = cl_device_info;        };
     template<> struct obj_info_type<cl_context>       { using type = cl_context_info;       };
     template<> struct obj_info_type<cl_command_queue> { using type = cl_command_queue_info; };
+    template<> struct obj_info_type<cl_program>       { using type = cl_program_info;       };
 
     /*------------------------------------------------------------------------------------------*/
 

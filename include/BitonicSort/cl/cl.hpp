@@ -197,10 +197,19 @@ namespace bitonic_sort::detail {
 
     /*------------------------------------------------------------------------------------------*/
 
+    template<typename ObjT> struct obj_info_type;
+    
+    template<> struct obj_info_type<cl_platform_id> { using type = cl_platform_info; };
+    template<> struct obj_info_type<cl_context>     { using type = cl_context_info;  };
+
+    /*------------------------------------------------------------------------------------------*/
+
     template <typename ObjT>
     class wrapper_t {
     protected:
         ObjT obj_;
+
+        using InfoT = typename detail::obj_info_type<ObjT>::type;
 
     public:
         wrapper_t(ObjT obj = NULL) : obj_(obj) {
@@ -242,7 +251,7 @@ namespace bitonic_sort::detail {
         cl_int retain()  const { return ReferenceHandler<ObjT>::retain (obj_); }
         cl_int release() const { return ReferenceHandler<ObjT>::release(obj_); }
 
-        template <typename InfoT, InfoT NameT>
+        template <InfoT NameT>
         typename detail::param_traits<InfoT, NameT>::type wrapper_get_info() const {
             using traits_type = detail::param_traits<InfoT, NameT>;
  

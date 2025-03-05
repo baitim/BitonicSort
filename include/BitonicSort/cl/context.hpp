@@ -26,7 +26,7 @@ namespace bitonic_sort {
         template <cl_context_info context_name>
         typename detail::param_traits<cl_context_info, context_name>::type 
         get_info() const {
-            return wrapper_get_info<cl_context_info, context_name>();
+            return wrapper_get_info<context_name>();
         }
     };
 }

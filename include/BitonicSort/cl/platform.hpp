@@ -34,7 +34,7 @@ namespace bitonic_sort {
         template <cl_platform_info platform_name>
         typename detail::param_traits<cl_platform_info, platform_name>::type 
         get_info() const {
-            return wrapper_get_info<cl_platform_info, platform_name>();
+            return wrapper_get_info<platform_name>();
         }
     };
 }

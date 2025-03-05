@@ -24,8 +24,29 @@ namespace bitonic_sort {
         context_t(const device_t& device)
         : detail::wrapper_t<cl_context>(get_gpu_context(device.obj())), device_(device) {}
 
-        context_t(const context_t& context)
-        : detail::wrapper_t<cl_context>(context.obj_), device_(context.device_) {}
+        context_t(const context_t& rhs)
+        : detail::wrapper_t<cl_context>(rhs.obj_), device_(rhs.device_) {}
+
+        context_t &operator=(const context_t &rhs) {
+            if (this == &rhs)
+                return *this;
+
+            context_t new_context{rhs};
+            std::swap(*this, new_context);
+            return *this;
+        }
+
+        context_t(context_t &&rhs) noexcept : detail::wrapper_t<cl_context>(std::move(rhs.obj_)),
+                                              device_(std::move(rhs.device_)) {}
+
+        context_t &operator=(context_t &&rhs) noexcept {
+            if (this == &rhs)
+                return *this;
+
+            detail::wrapper_t<cl_context>::operator=(std::move(rhs.obj_));
+            std::swap(device_, rhs.device_);
+            return *this;
+        }
 
         const device_t& device() const { return device_; }
 

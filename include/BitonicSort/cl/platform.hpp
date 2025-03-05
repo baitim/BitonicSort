@@ -27,8 +27,27 @@ namespace bitonic_sort {
     public:
         platform_t() : detail::wrapper_t<cl_platform_id>(select_platform()) {}
 
-        platform_t(const platform_t& platform)
-        : detail::wrapper_t<cl_platform_id>(platform.obj_) {}
+        platform_t(const platform_t& rhs)
+        : detail::wrapper_t<cl_platform_id>(rhs.obj_) {}
+
+        platform_t &operator=(const platform_t &rhs) {
+            if (this == &rhs)
+                return *this;
+
+            platform_t new_platform{rhs};
+            std::swap(*this, new_platform);
+            return *this;
+        }
+
+        platform_t(platform_t &&rhs) noexcept : detail::wrapper_t<cl_platform_id>(std::move(rhs.obj_)) {}
+
+        platform_t &operator=(platform_t &&rhs) noexcept {
+            if (this == &rhs)
+                return *this;
+
+            detail::wrapper_t<cl_platform_id>::operator=(std::move(rhs.obj_));
+            return *this;
+        }
 
         template <cl_platform_info platform_name>
         typename detail::param_traits<cl_platform_info, platform_name>::type 

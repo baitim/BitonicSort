@@ -11,8 +11,29 @@ namespace bitonic_sort {
             cl_handler(clGetDeviceIDs, platform_.obj(), CL_DEVICE_TYPE_DEFAULT, 1, &obj_, nullptr);
         }
 
-        device_t(const device_t& device)
-        : detail::wrapper_t<cl_device_id>(device.obj_), platform_(device.platform_) {}
+        device_t(const device_t& rhs)
+        : detail::wrapper_t<cl_device_id>(rhs.obj_), platform_(rhs.platform_) {}
+
+        device_t &operator=(const device_t &rhs) {
+            if (this == &rhs)
+                return *this;
+
+            device_t new_device{rhs};
+            std::swap(*this, new_device);
+            return *this;
+        }
+
+        device_t(device_t &&rhs) noexcept : detail::wrapper_t<cl_device_id>(std::move(rhs.obj_)),
+                                            platform_(std::move(rhs.platform_)) {}
+
+        device_t &operator=(device_t &&rhs) noexcept {
+            if (this == &rhs)
+                return *this;
+
+            detail::wrapper_t<cl_device_id>::operator=(std::move(rhs.obj_));
+            std::swap(platform_, rhs.platform_);
+            return *this;
+        }
 
         template <cl_device_info device_name>
         typename detail::param_traits<cl_device_info, device_name>::type 

@@ -16,8 +16,29 @@ namespace bitonic_sort {
             cl_handler(clBuildProgram, obj_, 1, &context_.device()(), nullptr, nullptr, nullptr);
         }
 
-        program_t(const program_t& program)
-        : detail::wrapper_t<cl_program>(program.obj_), context_(program.context_) {}
+        program_t(const program_t& rhs)
+        : detail::wrapper_t<cl_program>(rhs.obj_), context_(rhs.context_) {}
+
+        program_t &operator=(const program_t &rhs) {
+            if (this == &rhs)
+                return *this;
+
+            program_t new_program{rhs};
+            std::swap(*this, new_program);
+            return *this;
+        }
+
+        program_t(program_t &&rhs) noexcept : detail::wrapper_t<cl_program>(std::move(rhs.obj_)),
+                                              context_(std::move(rhs.context_)) {}
+
+        program_t &operator=(program_t &&rhs) noexcept {
+            if (this == &rhs)
+                return *this;
+
+            detail::wrapper_t<cl_program>::operator=(std::move(rhs.obj_));
+            std::swap(context_, rhs.context_);
+            return *this;
+        }
 
         const context_t& context() const { return context_; }
 

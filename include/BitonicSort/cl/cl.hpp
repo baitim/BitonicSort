@@ -456,10 +456,10 @@ namespace bitonic_sort::detail {
             return *this;
         }
 
-        wrapper_t(wrapper_t &&rhs) noexcept : obj_(std::exchange(rhs.obj_, NULL)) {}
+        wrapper_t(wrapper_t &&rhs) noexcept : obj_(std::exchange(rhs.obj_, nullptr)) {}
 
         wrapper_t &operator=(wrapper_t &&rhs) noexcept {
-            obj_ = std::exchange(rhs.obj_, NULL);
+            obj_ = std::exchange(rhs.obj_, nullptr);
             return *this;
         }
 

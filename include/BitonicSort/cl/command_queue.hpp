@@ -12,8 +12,29 @@ namespace bitonic_sort {
             cl_handler(clCreateCommandQueue, context.obj(), context.device().obj(), 0, nullptr)
         ), context_(context) {}
 
-        command_queue_t(const command_queue_t& command_queue)
-        : detail::wrapper_t<cl_command_queue>(command_queue.obj_), context_(command_queue.context_) {}
+        command_queue_t(const command_queue_t& rhs)
+        : detail::wrapper_t<cl_command_queue>(rhs.obj_), context_(rhs.context_) {}
+
+        command_queue_t &operator=(const command_queue_t &rhs) {
+            if (this == &rhs)
+                return *this;
+
+            command_queue_t new_command_queue{rhs};
+            std::swap(*this, new_command_queue);
+            return *this;
+        }
+
+        command_queue_t(command_queue_t &&rhs) noexcept : detail::wrapper_t<cl_command_queue>(std::move(rhs.obj_)),
+                                                          context_(std::move(rhs.context_)) {}
+
+        command_queue_t &operator=(command_queue_t &&rhs) noexcept {
+            if (this == &rhs)
+                return *this;
+
+            detail::wrapper_t<cl_command_queue>::operator=(std::move(rhs.obj_));
+            std::swap(context_, rhs.context_);
+            return *this;
+        }
 
         const context_t& context() const { return context_; }
 

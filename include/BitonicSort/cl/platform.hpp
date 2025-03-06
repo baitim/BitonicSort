@@ -30,7 +30,7 @@ namespace bitonic_sort {
         platform_t(const platform_t& rhs)
         : detail::wrapper_t<cl_platform_id>(rhs.obj_) {}
 
-        platform_t &operator=(const platform_t &rhs) {
+        platform_t& operator=(const platform_t& rhs) {
             if (this == &rhs)
                 return *this;
 
@@ -39,9 +39,9 @@ namespace bitonic_sort {
             return *this;
         }
 
-        platform_t(platform_t &&rhs) noexcept : detail::wrapper_t<cl_platform_id>(std::move(rhs.obj_)) {}
+        platform_t(platform_t&& rhs) noexcept : detail::wrapper_t<cl_platform_id>(std::move(rhs.obj_)) {}
 
-        platform_t &operator=(platform_t &&rhs) noexcept {
+        platform_t& operator=(platform_t&& rhs) noexcept {
             if (this == &rhs)
                 return *this;
 

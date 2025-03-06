@@ -121,6 +121,10 @@ namespace bitonic_sort::detail {
         static constexpr auto get_info_func = &clGetKernelInfo;
     };
 
+    struct memory_type {
+        static constexpr auto get_info_func = &clGetMemObjectInfo;
+    };
+
     template <typename T, cl_int NameT> struct param_traits {};
 
     /*------------------------------------------------------------------------------------------*/
@@ -415,6 +419,78 @@ namespace bitonic_sort::detail {
 
     /*------------------------------------------------------------------------------------------*/
 
+    template<> struct param_traits<cl_mem_info, CL_MEM_TYPE> : public memory_type {
+        enum { value = CL_MEM_TYPE };
+        using type = cl_mem_object_type;
+        static type to_type(std::string &str) {
+            type result;
+            std::copy_n(str.data(), sizeof(type), reinterpret_cast<char*>(&result));
+            return result;
+        }
+    };
+
+    template<> struct param_traits<cl_mem_info, CL_MEM_FLAGS> : public memory_type {
+        enum { value = CL_MEM_FLAGS };
+        using type = cl_mem_flags;
+        static type to_type(std::string &str) {
+            type result;
+            std::copy_n(str.data(), sizeof(type), reinterpret_cast<char*>(&result));
+            return result;
+        }
+    };
+
+    template<> struct param_traits<cl_mem_info, CL_MEM_SIZE> : public memory_type {
+        enum { value = CL_MEM_SIZE };
+        using type = size_t;
+        static type to_type(std::string &str) {
+            type result;
+            std::copy_n(str.data(), sizeof(type), reinterpret_cast<char*>(&result));
+            return result;
+        }
+    };
+
+    template<> struct param_traits<cl_mem_info, CL_MEM_HOST_PTR> : public memory_type {
+        enum { value = CL_MEM_HOST_PTR };
+        using type = void*;
+        static type to_type(std::string &str) {
+            type result;
+            std::copy_n(str.data(), sizeof(type), reinterpret_cast<char*>(&result));
+            return result;
+        }
+    };
+
+    template<> struct param_traits<cl_mem_info, CL_MEM_MAP_COUNT> : public memory_type {
+        enum { value = CL_MEM_MAP_COUNT };
+        using type = cl_uint;
+        static type to_type(std::string &str) {
+            type result;
+            std::copy_n(str.data(), sizeof(type), reinterpret_cast<char*>(&result));
+            return result;
+        }
+    };
+
+    template<> struct param_traits<cl_mem_info, CL_MEM_REFERENCE_COUNT> : public memory_type {
+        enum { value = CL_MEM_REFERENCE_COUNT };
+        using type = cl_uint;
+        static type to_type(std::string &str) {
+            type result;
+            std::copy_n(str.data(), sizeof(type), reinterpret_cast<char*>(&result));
+            return result;
+        }
+    };
+
+    template<> struct param_traits<cl_mem_info, CL_MEM_CONTEXT> : public memory_type {
+        enum { value = CL_MEM_CONTEXT };
+        using type = cl_context;
+        static type to_type(std::string &str) {
+            type result;
+            std::copy_n(str.data(), sizeof(type), reinterpret_cast<char*>(&result));
+            return result;
+        }
+    };    
+
+    /*------------------------------------------------------------------------------------------*/
+
     template<typename ObjT> struct obj_info_type;
     
     template<> struct obj_info_type<cl_platform_id>   { using type = cl_platform_info;      };
@@ -422,7 +498,8 @@ namespace bitonic_sort::detail {
     template<> struct obj_info_type<cl_context>       { using type = cl_context_info;       };
     template<> struct obj_info_type<cl_command_queue> { using type = cl_command_queue_info; };
     template<> struct obj_info_type<cl_program>       { using type = cl_program_info;       };
-    template<> struct obj_info_type<cl_kernel>        { using type = cl_kernel_info;       };
+    template<> struct obj_info_type<cl_kernel>        { using type = cl_kernel_info;        };
+    template<> struct obj_info_type<cl_mem>           { using type = cl_mem_info;           };
 
     /*------------------------------------------------------------------------------------------*/
 
@@ -431,7 +508,7 @@ namespace bitonic_sort::detail {
     protected:
         ObjT obj_;
 
-        using InfoT = typename detail::obj_info_type<ObjT>::type;
+        using InfoT = typename obj_info_type<ObjT>::type;
 
     public:
         wrapper_t(ObjT obj = NULL) : obj_(obj) {

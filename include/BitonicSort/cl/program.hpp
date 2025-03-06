@@ -19,7 +19,7 @@ namespace bitonic_sort {
         program_t(const program_t& rhs)
         : detail::wrapper_t<cl_program>(rhs.obj_), context_(rhs.context_) {}
 
-        program_t &operator=(const program_t &rhs) {
+        program_t& operator=(const program_t& rhs) {
             if (this == &rhs)
                 return *this;
 
@@ -28,10 +28,10 @@ namespace bitonic_sort {
             return *this;
         }
 
-        program_t(program_t &&rhs) noexcept : detail::wrapper_t<cl_program>(std::move(rhs.obj_)),
+        program_t(program_t&& rhs) noexcept : detail::wrapper_t<cl_program>(std::move(rhs.obj_)),
                                               context_(std::move(rhs.context_)) {}
 
-        program_t &operator=(program_t &&rhs) noexcept {
+        program_t& operator=(program_t&& rhs) noexcept {
             if (this == &rhs)
                 return *this;
 

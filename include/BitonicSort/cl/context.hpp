@@ -27,7 +27,7 @@ namespace bitonic_sort {
         context_t(const context_t& rhs)
         : detail::wrapper_t<cl_context>(rhs.obj_), device_(rhs.device_) {}
 
-        context_t &operator=(const context_t &rhs) {
+        context_t& operator=(const context_t& rhs) {
             if (this == &rhs)
                 return *this;
 
@@ -36,10 +36,10 @@ namespace bitonic_sort {
             return *this;
         }
 
-        context_t(context_t &&rhs) noexcept : detail::wrapper_t<cl_context>(std::move(rhs.obj_)),
+        context_t(context_t&& rhs) noexcept : detail::wrapper_t<cl_context>(std::move(rhs.obj_)),
                                               device_(std::move(rhs.device_)) {}
 
-        context_t &operator=(context_t &&rhs) noexcept {
+        context_t& operator=(context_t&& rhs) noexcept {
             if (this == &rhs)
                 return *this;
 

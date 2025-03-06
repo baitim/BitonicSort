@@ -15,7 +15,7 @@ namespace bitonic_sort {
         command_queue_t(const command_queue_t& rhs)
         : detail::wrapper_t<cl_command_queue>(rhs.obj_), context_(rhs.context_) {}
 
-        command_queue_t &operator=(const command_queue_t &rhs) {
+        command_queue_t& operator=(const command_queue_t& rhs) {
             if (this == &rhs)
                 return *this;
 
@@ -24,10 +24,10 @@ namespace bitonic_sort {
             return *this;
         }
 
-        command_queue_t(command_queue_t &&rhs) noexcept : detail::wrapper_t<cl_command_queue>(std::move(rhs.obj_)),
+        command_queue_t(command_queue_t&& rhs) noexcept : detail::wrapper_t<cl_command_queue>(std::move(rhs.obj_)),
                                                           context_(std::move(rhs.context_)) {}
 
-        command_queue_t &operator=(command_queue_t &&rhs) noexcept {
+        command_queue_t& operator=(command_queue_t&& rhs) noexcept {
             if (this == &rhs)
                 return *this;
 

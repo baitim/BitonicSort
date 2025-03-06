@@ -17,7 +17,7 @@ namespace bitonic_sort {
         kernel_t(const kernel_t& rhs)
         : detail::wrapper_t<cl_kernel>(rhs.obj_), program_(rhs.program_), queue_(rhs.queue_) {}
 
-        kernel_t &operator=(const kernel_t &rhs) {
+        kernel_t& operator=(const kernel_t& rhs) {
             if (this == &rhs)
                 return *this;
 
@@ -26,11 +26,11 @@ namespace bitonic_sort {
             return *this;
         }
 
-        kernel_t(kernel_t &&rhs) noexcept : detail::wrapper_t<cl_kernel>(std::move(rhs.obj_)),
+        kernel_t(kernel_t&& rhs) noexcept : detail::wrapper_t<cl_kernel>(std::move(rhs.obj_)),
                                             program_(std::move(rhs.program_)),
                                             queue_  (std::move(rhs.queue_)) {}
 
-        kernel_t &operator=(kernel_t &&rhs) noexcept {
+        kernel_t& operator=(kernel_t&& rhs) noexcept {
             if (this == &rhs)
                 return *this;
 

@@ -10,7 +10,8 @@ int main(int argc, char* argv[]) {
 
         std::vector<int> data;
         bitonic_sort::read_data(std::cin, data);
-        bitonic_sort::bitonic_sort(data, kernel_file);
+
+        bitonic_sort::bitonic_sort_cpu(data);
 
     } catch (cl::Error& error) {
         std::cout << error.what() << "\n";

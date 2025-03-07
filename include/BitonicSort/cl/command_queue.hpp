@@ -36,6 +36,10 @@ namespace bitonic_sort {
             return *this;
         }
 
+        void barrier() {
+            cl_handler(clFinish, obj_);
+        }
+
         const context_t& context() const { return context_; }
 
         template <cl_command_queue_info command_queue_name>

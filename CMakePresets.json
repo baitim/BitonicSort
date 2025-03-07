@@ -25,6 +25,7 @@
         "binaryDir": "${sourceDir}/build/Release",
         "cacheVariables": {
             "CMAKE_BUILD_TYPE": "Release",
+          "CMAKE_CXX_FLAGS_DEBUG": "-O2",
             "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/Release/generators/conan_toolchain.cmake"
         }
       }

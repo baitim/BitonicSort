@@ -2,6 +2,7 @@
 
 #include "BitonicSort/cl/command_queue.hpp"
 #include "BitonicSort/cl/program.hpp"
+#include "BitonicSort/cl/memory.hpp"
 
 namespace bitonic_sort {
     class kernel_t final : public detail::wrapper_t<cl_kernel> {
@@ -38,6 +39,23 @@ namespace bitonic_sort {
             std::swap(program_, rhs.program_);
             std::swap(queue_,   rhs.queue_);
             return *this;
+        }
+
+        template <typename T>
+        void set_argument(cl_uint arg_num, const T& arg_value) {
+            cl_handler(clSetKernelArg, obj_, arg_num, sizeof(arg_value), &arg_value);
+        }
+
+        void set_memory(int index, memory_t& memory) {
+            cl_handler(clSetKernelArg, obj_, index, sizeof(cl_mem), &memory.get_retain());
+        }
+
+        void execute(size_t global_size, size_t local_size) {
+            cl_handler(
+                clEnqueueNDRangeKernel,
+                    queue_.obj(), obj_, 1, nullptr, &global_size, &local_size, 0, nullptr, nullptr
+            );
+            cl_handler(clFinish, queue_.obj());
         }
 
         template <cl_kernel_info kernel_name>

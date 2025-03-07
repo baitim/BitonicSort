@@ -487,7 +487,7 @@ namespace bitonic_sort::detail {
             std::copy_n(str.data(), sizeof(type), reinterpret_cast<char*>(&result));
             return result;
         }
-    };    
+    };
 
     /*------------------------------------------------------------------------------------------*/
 
@@ -543,7 +543,8 @@ namespace bitonic_sort::detail {
               ObjT& operator()()       { return obj_; }
         const ObjT& operator()() const { return obj_; }
 
-        ObjT obj() const { return obj_; }
+        ObjT  obj() const { return obj_; }
+        ObjT& get_retain() { retain(); return obj_; }
 
         cl_int retain()  const { return ReferenceHandler<ObjT>::retain (obj_); }
         cl_int release() const { return ReferenceHandler<ObjT>::release(obj_); }

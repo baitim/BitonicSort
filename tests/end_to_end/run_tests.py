@@ -16,7 +16,7 @@ def run(answer_dir, exe_file):
     ans_file.write(subprocess.check_output(command, shell=True).decode("utf-8").rstrip())
     ans_file.close()
 
-graph_exe = build_dir + "/../../src/graph"
+graph_exe = build_dir + "/../../src/bitonic_sort"
 answer_dir = tests_dir + "/answers"
 tests_dir  = tests_dir + "/tests_in"
 

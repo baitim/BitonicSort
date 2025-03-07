@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BitonicSort/cl/command_queue.hpp"
+#include <memory>
 
 namespace bitonic_sort {
     class memory_t final : public detail::wrapper_t<cl_mem> {
@@ -8,9 +9,38 @@ namespace bitonic_sort {
         command_queue_t command_queue_;
 
     public:
-        memory_t(const command_queue_t& command_queue, cl_mem_flags flags, size_t size)
-        : size_(size), command_queue_(command_queue) {
-            obj_ = cl_handler(clCreateBuffer, command_queue.context().obj(), flags, size, nullptr, nullptr);
+        template <typename It>
+        memory_t(const command_queue_t& command_queue, cl_mem_flags flags, It begin, It end)
+        : command_queue_(command_queue) {
+
+            using ElemT = typename std::iterator_traits<It>::value_type;
+            size_ = sizeof(ElemT) * std::distance(begin, end);
+
+            obj_ = cl_handler(clCreateBuffer, command_queue.context().obj(), flags, size_, nullptr, nullptr);
+
+            std::unique_ptr<ElemT[]> data = std::make_unique<ElemT[]>(size_);
+            std::copy(begin, end, data.get());
+
+            cl_handler(
+                clEnqueueWriteBuffer,
+                    command_queue_.obj(), obj_, CL_TRUE, 0, size_, data.get(), 0, nullptr, nullptr
+            );
+        }
+
+        template <typename It>
+        void get(It begin, size_t size) const {
+            using ElemT = typename std::iterator_traits<It>::value_type;
+
+            size_t count_elems = std::min(size, size_ / sizeof(ElemT));
+            std::unique_ptr<ElemT[]> data = std::make_unique<ElemT[]>(count_elems);
+
+            size_t size_in_bytes = count_elems * sizeof(ElemT);
+            cl_handler(
+                clEnqueueReadBuffer,
+                    command_queue_.obj(), obj_, CL_TRUE, 0, size_in_bytes, data.get(), 0, nullptr, nullptr
+            );
+
+            std::copy(data.get(), data.get() + count_elems, begin);
         }
 
         memory_t(const memory_t& rhs)

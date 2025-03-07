@@ -11,7 +11,11 @@ int main(int argc, char* argv[]) {
         std::vector<int> data;
         bitonic_sort::read_data(std::cin, data);
 
-        bitonic_sort::bitonic_sort_cpu(data);
+        bitonic_sort::bitonic_sort_gpu(data, kernel_file);
+
+        for (auto i : data)
+            std::cout << i << " ";
+        std::cout << "\n";
 
     } catch (cl::Error& error) {
         std::cout << error.what() << "\n";

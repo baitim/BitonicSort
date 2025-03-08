@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BitonicSort/cl/context.hpp"
+#include <memory>
 
 namespace bitonic_sort {
     class program_t final : public detail::wrapper_t<cl_program> {
@@ -13,7 +14,21 @@ namespace bitonic_sort {
             size_t size = kernel_code.size();
 
             obj_ = cl_handler(clCreateProgramWithSource, context_.obj(), 1, &data, &size, nullptr);
-            cl_handler(clBuildProgram, obj_, 1, &context_.device()(), nullptr, nullptr, nullptr);
+
+            cl_int err = clBuildProgram(obj_, 1, &context_.device()(), nullptr, nullptr, nullptr);
+            if (err == CL_SUCCESS)
+                return;
+
+            size_t log_size;
+            clGetProgramBuildInfo(obj_, context_.device()(), CL_PROGRAM_BUILD_LOG, 0, nullptr, &log_size);
+
+            std::unique_ptr<char[]> log(new char[log_size]);
+            cl_handler(
+                clGetProgramBuildInfo,
+                    obj_, context_.device()(), CL_PROGRAM_BUILD_LOG, log_size, log.get(), nullptr
+            );
+
+            throw error_t{str_red(std::string{"Error in OpenCL program build: "} + log.get())};
         }
 
         program_t(const program_t& rhs)

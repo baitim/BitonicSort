@@ -16,7 +16,12 @@ namespace bitonic_sort {
 
             cl_uint num_devices;
             for (auto platform : platforms) {
-                cl_handler(clGetDeviceIDs, platform, CL_DEVICE_TYPE_GPU, 0, nullptr, &num_devices);
+                cl_int error = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 0, nullptr, &num_devices);
+                if (error == CL_DEVICE_NOT_FOUND)
+                    cl_handler(clGetDeviceIDs, platform, CL_DEVICE_TYPE_CPU, 0, nullptr, &num_devices);
+                else
+                    check_cl_error(error, clGetDeviceIDs);
+                
                 if (num_devices > 0)
                     return platform;
             }

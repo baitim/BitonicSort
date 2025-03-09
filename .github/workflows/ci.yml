@@ -13,6 +13,9 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
+      
+      - name: install OpenCL headers and loader
+        run: sudo apt install ocl-icd-libopencl1 ocl-icd-opencl-dev
 
       - name: install uv
         uses: astral-sh/setup-uv@v5
@@ -55,6 +58,9 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
+
+      - name: install OpenCL headers and loader
+        run: sudo apt install ocl-icd-libopencl1 ocl-icd-opencl-dev
 
       - name: install uv
         uses: astral-sh/setup-uv@v5

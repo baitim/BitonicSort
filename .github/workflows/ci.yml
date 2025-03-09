@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
       
       - name: install OpenCL headers and loader
-        run: sudo apt install pocl-opencl-icd
+        run: sudo apt install ocl-icd-libopencl1 ocl-icd-opencl-dev opencl-headers
 
       - name: install uv
         uses: astral-sh/setup-uv@v5
@@ -60,7 +60,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: install OpenCL headers and loader
-        run: sudo apt install pocl-opencl-icd
+        run: sudo apt install ocl-icd-libopencl1 ocl-icd-opencl-dev opencl-headers
 
       - name: install uv
         uses: astral-sh/setup-uv@v5

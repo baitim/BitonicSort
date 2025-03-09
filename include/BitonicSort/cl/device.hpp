@@ -8,7 +8,11 @@ namespace bitonic_sort {
 
     public:
         device_t() {
-            cl_handler(clGetDeviceIDs, platform_.obj(), CL_DEVICE_TYPE_DEFAULT, 1, &obj_, nullptr);
+            cl_int error = clGetDeviceIDs(platform_.obj(), CL_DEVICE_TYPE_GPU, 1, &obj_, nullptr);
+            if (error == CL_DEVICE_NOT_FOUND)
+                cl_handler(clGetDeviceIDs, platform_.obj(), CL_DEVICE_TYPE_CPU, 1, &obj_, nullptr);
+            else
+                check_cl_error(error, clGetDeviceIDs);
         }
 
         device_t(const device_t& rhs)

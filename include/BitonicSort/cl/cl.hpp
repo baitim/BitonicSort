@@ -15,7 +15,10 @@
 #include <vector>
 
 namespace bitonic_sort {
-    inline void check_cl_error(cl_int error, std::string_view func_name,
+
+    #define check_cl_error(error, func, ...) check_cl_error_(error, #func, __FILE__, __func__);
+    
+    inline void check_cl_error_(cl_int error, std::string_view func_name,
                                const char* file, const char* caller_func) {
         if (error != CL_SUCCESS) {
             std::stringstream ss;
@@ -35,7 +38,7 @@ namespace bitonic_sort {
                             -> std::invoke_result_t<Func, Args...> {
         if constexpr(std::is_same_v<std::invoke_result_t<Func, Args...>, cl_int>) {
             cl_int error = std::invoke(func, std::forward<Args>(args)...);
-            check_cl_error(error, func_name, file, caller_func);
+            check_cl_error_(error, func_name, file, caller_func);
             return error;
         } else {
             auto result = std::invoke(func, std::forward<Args>(args)...);

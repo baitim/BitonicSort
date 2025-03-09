@@ -50,12 +50,15 @@ namespace bitonic_sort {
             cl_handler(clSetKernelArg, obj_, index, sizeof(cl_mem), &memory.get_retain());
         }
 
+        void set_local_memory(cl_uint arg_num, size_t size) {
+            cl_handler(clSetKernelArg, obj_, arg_num, size, nullptr);
+        }
+
         void execute(size_t global_size, size_t local_size) {
             cl_handler(
                 clEnqueueNDRangeKernel,
                     queue_.obj(), obj_, 1, nullptr, &global_size, &local_size, 0, nullptr, nullptr
             );
-            cl_handler(clFinish, queue_.obj());
         }
 
         template <cl_kernel_info kernel_name>

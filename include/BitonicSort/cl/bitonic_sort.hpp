@@ -94,16 +94,17 @@ namespace bitonic_sort {
 
         bitonic_sort::memory_t memory(command_queue, CL_MEM_READ_WRITE, data.begin(), data.end());
 
-        size_t max_work_group_size = device.get_info<CL_DEVICE_MAX_WORK_GROUP_SIZE>() / sizeof(ElemT);
-        size_t local_size = ((size > max_work_group_size) ? max_work_group_size : size);
+        size_t max_work_group_size = device.get_info<CL_DEVICE_MAX_WORK_GROUP_SIZE>();
+        size_t local_size = std::min(size, max_work_group_size);
+
         kernel.set_memory(0, memory);
+        kernel.set_local_memory(1, sizeof(ElemT) * local_size);
 
         for (size_t step = 2; step <= size; step *= 2) {
+            kernel.set_argument(2, static_cast<cl_int>(step));
             for (size_t stage = step / 2; stage > 0; stage /= 2) {
-                kernel.set_argument(1, step);
-                kernel.set_argument(2, stage);
+                kernel.set_argument(3, static_cast<cl_int>(stage));
                 kernel.execute(size, local_size);
-
                 command_queue.barrier();
             }
         }

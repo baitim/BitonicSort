@@ -36,6 +36,21 @@
     - End to end & Unit<br>
         <code>ctest --test-dir build/Release --output-on-failure</code>
 
+## How to compare
+
+* Preparing
+    write <code>cd compare</code> in terminal <br>
+    write <code>python3 generate.py</code> in terminal <br>
+
+* Comparing
+    write <code>python3 compare.py</code> in terminal <br>
+    The result of the comparison will be in the "compare.out" and "times.png" file
+
+<figure>
+    <p align="center"><img src="https://github.com/baitim/AVLTree/blob/main/compare/times.png" width="80%"></p>
+    <figcaption><p align="center">i5-1135G7 & Intel® Xe Graphics</p></figcaption>
+</figure>
+
 <p align="center"><img src="https://github.com/baitim/BitonicSort/blob/main/images/cat.gif" width="40%"></p>
 
 ## Support

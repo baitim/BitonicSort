@@ -20,6 +20,9 @@ graph_exe = build_dir + "/../../src/bitonic_sort"
 answer_dir = tests_dir + "/answers"
 tests_dir  = tests_dir + "/tests_in"
 
+os.system("rm -rf " + answer_dir)
+os.system("mkdir " + answer_dir)
+
 test_num = 0
 files = list(map(str, glob.glob(tests_dir + "/test_*.in")))
 files.sort()

@@ -7,14 +7,24 @@
 namespace bitonic_sort {
 
     template <typename ElemT>
-    concept sortable_elem_t = requires(ElemT elem) {
-        {elem < elem} -> std::convertible_to<bool>;
-        {elem > elem} -> std::convertible_to<bool>;
-        {std::cin >> elem} -> std::same_as<std::istream&>;
-    };
+    concept sortable_elem_t =
+        requires(ElemT elem) {
+            { elem > elem } -> std::convertible_to<bool>;
+            { std::cin >> elem } -> std::same_as<std::istream&>;
+            { std::numeric_limits<ElemT>::max() } -> std::convertible_to<ElemT>;
+        } && std::copyable<ElemT>
+          && std::default_initializable<ElemT>;
 
-    template <sortable_elem_t ElemT>
-    inline void read_data(std::istream& is, std::vector<ElemT>& data) {
+    template <typename It>
+    concept sortable_output_iterator =
+        std::output_iterator<It, typename std::iter_value_t<It>> &&
+        sortable_elem_t<typename std::iter_value_t<It>>;
+
+    template <typename ContainerT>
+    requires sortable_elem_t<typename ContainerT::value_type>
+    inline void read_data(std::istream& is, std::back_insert_iterator<ContainerT> out) {
+        using ElemT = typename ContainerT::value_type;
+
         int size;
         is >> size;
         if (!is.good())
@@ -22,19 +32,21 @@ namespace bitonic_sort {
         if (size <= 0)
             throw error_t{str_red("Count of elements <= 0")};
 
-        data.resize(size);
-        for (int i = 0; i < size; ++i)
-            is >> data[i];
+        for (int i = 0; i < size; ++i) {
+            ElemT elem;
+            is >> elem;
+            *out++ = elem;
+        }
     }
 
     template <sortable_elem_t ElemT>
-    void resize2pow2(std::vector<ElemT>& data, const ElemT& filling_elem) {
+    inline void resize2pow2(std::vector<ElemT>& data, const ElemT& filling_elem) {
         int new_size = std::pow(2, static_cast<int>(std::log2(data.size() - 1) + 1));
         data.resize(new_size, filling_elem);
     }
 
     template <sortable_elem_t ElemT>
-    void bitonic_merge_cpu(std::vector<ElemT>& data, size_t low, size_t size, bool ascending) {
+    inline void bitonic_merge_cpu(std::vector<ElemT>& data, size_t low, size_t size, bool ascending) {
         for (size_t block = size / 2; block > 0; block /= 2) {
             size_t count_blocks = size / 2 / block;
 
@@ -54,7 +66,7 @@ namespace bitonic_sort {
     }
 
     template <sortable_elem_t ElemT>
-    void bitonic_split_cpu(std::vector<ElemT>& data, size_t size) {
+    inline void bitonic_split_cpu(std::vector<ElemT>& data, size_t size) {
         for (size_t n = 2; n <= size; n *= 2) {
             for (size_t low = 0, i = 1; low < size; low += n, ++i) {
                 bitonic_merge_cpu(data, low, n, i % 2);
@@ -62,37 +74,44 @@ namespace bitonic_sort {
         }
     }
 
-    template <sortable_elem_t ElemT>
-    inline void bitonic_sort_cpu(std::vector<ElemT>& data) {
-        if (data.size() <= 1)
+    template <std::random_access_iterator It>
+    requires sortable_elem_t<typename std::iterator_traits<It>::value_type>
+    inline void bitonic_sort_cpu(It begin, It end) {
+        using ElemT = typename std::iterator_traits<It>::value_type;
+
+        const size_t old_size = std::distance(begin, end);
+        if (old_size <= 1)
             return;
 
-        ElemT max_elem = std::numeric_limits<ElemT>::max();
-        size_t old_size = data.size();
-        resize2pow2(data, max_elem);
-        size_t size = data.size();
+        std::vector<ElemT> temp(begin, end);
+        const ElemT max_elem = std::numeric_limits<ElemT>::max();
+        resize2pow2(temp, max_elem);
 
-        bitonic_split_cpu(data, size);
-        data.resize(old_size);
+        bitonic_split_cpu(temp, temp.size());
+
+        std::copy(temp.begin(), temp.begin() + old_size, begin);
     }
 
-    template <sortable_elem_t ElemT>
-    inline void bitonic_sort_gpu(std::vector<ElemT>& data, std::string_view kernel_file) {
-        if (data.size() <= 1)
+    template <std::random_access_iterator It>
+    requires sortable_elem_t<typename std::iterator_traits<It>::value_type>
+    inline void bitonic_sort_gpu(It begin, It end, std::string_view kernel_file) {
+        using ElemT = typename std::iterator_traits<It>::value_type;
+
+        const size_t old_size = std::distance(begin, end);
+        if (old_size <= 1)
             return;
+
+        std::vector<ElemT> temp(begin, end);
+        const ElemT max_elem = std::numeric_limits<ElemT>::max();
+        resize2pow2(temp, max_elem);
+        const size_t size = temp.size();
 
         bitonic_sort::device_t        device;
         bitonic_sort::context_t       context{device};
         bitonic_sort::command_queue_t command_queue{context};
         bitonic_sort::program_t       program(context, kernel_file);
         bitonic_sort::kernel_t        kernel(program, command_queue, "bitonic_merge");
-
-        ElemT max_elem = std::numeric_limits<ElemT>::max();
-        size_t old_size = data.size();
-        resize2pow2(data, max_elem);
-        size_t size = data.size();
-
-        bitonic_sort::memory_t memory(command_queue, CL_MEM_READ_WRITE, data.begin(), data.end());
+        bitonic_sort::memory_t        memory(command_queue, CL_MEM_READ_WRITE, temp.begin(), temp.end());
 
         size_t max_work_group_size = device.get_info<CL_DEVICE_MAX_WORK_GROUP_SIZE>();
         size_t local_size = std::min(size, max_work_group_size);
@@ -109,7 +128,7 @@ namespace bitonic_sort {
             }
         }
 
-        memory.get(data.begin(), old_size);
-        data.resize(old_size);
+        memory.get(temp.begin(), old_size);
+        std::copy(temp.begin(), temp.begin() + old_size, begin);
     }
 }

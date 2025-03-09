@@ -8,9 +8,9 @@ int main(int argc, char* argv[]) try {
     std::string kernel_file = dir + "bitonic_sort.cl";
 
     std::vector<int> data;
-    bitonic_sort::read_data(std::cin, data);
+    bitonic_sort::read_data(std::cin, std::back_inserter(data));
 
-    bitonic_sort::bitonic_sort_gpu(data, kernel_file);
+    bitonic_sort::bitonic_sort_gpu(data.begin(), data.end(), kernel_file);
 
     for (auto i : data)
         std::cout << i << " ";

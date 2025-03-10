@@ -18,6 +18,8 @@ target_sources(bitonic_sort
 target_link_libraries(bitonic_sort PRIVATE OpenCL::OpenCL)
 
 if(DEFINED ENV{CONAN_PACKAGE})
+    include(GNUInstallDirs)
+
     add_library(BitonicSort bitonic_sort.cpp)
     target_link_libraries(BitonicSort PRIVATE OpenCL::OpenCL)
     target_include_directories(BitonicSort PUBLIC
@@ -26,10 +28,10 @@ if(DEFINED ENV{CONAN_PACKAGE})
     )
 
     install(TARGETS BitonicSort EXPORT BitonicSortTargets
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
-        RUNTIME DESTINATION bin
-        INCLUDES DESTINATION include
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
     install(DIRECTORY ${INCLUDE_DIR}/BitonicSort DESTINATION include)

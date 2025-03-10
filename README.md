@@ -47,7 +47,7 @@
     The result of the comparison will be in the "compare.out" and "times.png" file
 
 <figure>
-    <p align="center"><img src="https://github.com/baitim/AVLTree/blob/main/compare/times.png" width="80%"></p>
+    <p align="center"><img src="https://github.com/baitim/BitonicSort/blob/main/compare/times.png" width="80%"></p>
     <figcaption><p align="center">i5-1135G7 & Intel® Xe Graphics</p></figcaption>
 </figure>
 

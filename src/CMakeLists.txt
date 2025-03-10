@@ -24,7 +24,7 @@ if(DEFINED ENV{CONAN_PACKAGE})
     target_link_libraries(BitonicSort PRIVATE OpenCL::OpenCL)
     target_include_directories(BitonicSort PUBLIC
         $<BUILD_INTERFACE:${INCLUDE_DIR}>
-        $<INSTALL_INTERFACE:include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     )
 
     install(TARGETS BitonicSort EXPORT BitonicSortTargets
@@ -34,7 +34,7 @@ if(DEFINED ENV{CONAN_PACKAGE})
         INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
-    install(DIRECTORY ${INCLUDE_DIR}/BitonicSort DESTINATION include)
+    install(DIRECTORY ${INCLUDE_DIR}/BitonicSort DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
     install(EXPORT BitonicSortTargets
         FILE BitonicSortConfig.cmake

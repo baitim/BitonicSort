@@ -71,7 +71,7 @@ namespace bitonic_sort {
     inline std::ostream& operator<<(std::ostream& os, kernel_t& kernel) {
         os << print_blue("kernel\n");
         os << print_blue("\tCL_KERNEL_FUNCTION_NAME: ") <<
-              print_lcyan(kernel.get_info<CL_KERNEL_FUNCTION_NAME>() << "\n");
+              print_lcyan(kernel.get_info<CL_KERNEL_FUNCTION_NAME>() << '\n');
         os << print_blue("\tCL_KERNEL_ATTRIBUTES: ") <<
               print_lcyan(kernel.get_info<CL_KERNEL_ATTRIBUTES>());
         return os;

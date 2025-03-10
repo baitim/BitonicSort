@@ -79,7 +79,7 @@ namespace bitonic_sort {
     inline std::ostream& operator<<(std::ostream& os, memory_t& memory) {
         os << print_blue("memory\n");
         os << print_blue("\tCL_MEM_SIZE: ") <<
-              print_lcyan(memory.get_info<CL_MEM_SIZE>() << "\n");
+              print_lcyan(memory.get_info<CL_MEM_SIZE>() << '\n');
         os << print_blue("\tCL_MEM_HOST_PTR: ") <<
               print_lcyan(memory.get_info<CL_MEM_HOST_PTR>());
         return os;

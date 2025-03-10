@@ -14,14 +14,15 @@ int main(int argc, char* argv[]) try {
 
     for (auto i : data)
         std::cout << i << " ";
-    std::cout << "\n";
-
-    return 0;
+    std::cout << '\n';
 
 } catch (cl::Error& error) {
-    std::cout << error.what() << "\n";
+    std::cout << error.what() << '\n';
     return 1;
 } catch (const bitonic_sort::error_t& error) {
-    std::cout << error.what() << "\n";
+    std::cout << error.what() << '\n';
+    return 1;
+} catch (...) {
+    std::cout << print_red("Unknown error\n");
     return 1;
 }

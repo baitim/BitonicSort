@@ -64,11 +64,11 @@ namespace bitonic_sort {
     inline std::ostream& operator<<(std::ostream& os, platform_t& platform) {
         os << print_blue("platform\n");
         os << print_blue("\tCL_PLATFORM_NAME: ") <<
-              print_lcyan(platform.get_info<CL_PLATFORM_NAME>() << "\n");
+              print_lcyan(platform.get_info<CL_PLATFORM_NAME>() << '\n');
         os << print_blue("\tCL_PLATFORM_PROFILE: ") <<
-              print_lcyan(platform.get_info<CL_PLATFORM_PROFILE>() << "\n");
+              print_lcyan(platform.get_info<CL_PLATFORM_PROFILE>() << '\n');
         os << print_blue("\tCL_PLATFORM_VERSION: ") <<
-              print_lcyan(platform.get_info<CL_PLATFORM_VERSION>() << "\n");
+              print_lcyan(platform.get_info<CL_PLATFORM_VERSION>() << '\n');
         os << print_blue("\tCL_PLATFORM_VENDOR: ") <<
               print_lcyan(platform.get_info<CL_PLATFORM_VENDOR>());
         return os;

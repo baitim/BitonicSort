@@ -22,8 +22,8 @@ namespace bitonic_sort {
                                const char* file, const char* caller_func) {
         if (error != CL_SUCCESS) {
             std::stringstream ss;
-            ss << "OpenCL error in: " << func_name << "\n"
-               << "error code: " << error << "\n"
+            ss << "OpenCL error in: " << func_name << '\n'
+               << "error code: " << error << '\n'
                << "called from: " << caller_func << " in " << file;
 
             throw error_t{str_red(ss.str())};

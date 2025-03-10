@@ -39,9 +39,9 @@ TEST(BitonicSort_shuffle, cmp_ete_with_core) {
         get_numbers_from_file(answer, answers_str[i]);
         get_numbers_from_file(answer_core, answers_core_str[i]);
 
-        ASSERT_EQ(answer.size(), answer_core.size()) << "in test : " << i + 1 << "\n";;
+        ASSERT_EQ(answer.size(), answer_core.size()) << "in test : " << i + 1 << '\n';;
         for (int j = 0, end = answer.size(); j < end; ++j)
-            EXPECT_EQ(answer[j], answer_core[j]) << "in test : " << i + 1 << " in number: " << j + 1 << "\n";;
+            EXPECT_EQ(answer[j], answer_core[j]) << "in test : " << i + 1 << " in number: " << j + 1 << '\n';;
     }
 }
 

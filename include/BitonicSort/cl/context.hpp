@@ -57,7 +57,7 @@ namespace bitonic_sort {
         }
     };
 
-    inline std::ostream& operator<<(std::ostream& os, context_t& context) {
+    inline std::ostream& operator<<(std::ostream& os, const context_t& context) {
         os << print_blue("context\n");
         os << print_blue("\tCL_CONTEXT_REFERENCE_COUNT: ") <<
               print_lcyan(context.get_info<CL_CONTEXT_REFERENCE_COUNT>() << '\n');

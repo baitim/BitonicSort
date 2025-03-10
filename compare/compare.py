@@ -39,10 +39,6 @@ for file in files :
 
 out_file.close()
 
-print(counts)
-print(gpu_times)
-print(cpu_times)
-print(sort_times)
 plt.plot(counts, gpu_times,  marker='o', label='bitonic_sort_gpu')
 plt.plot(counts, cpu_times,  marker='o', label='bitonic_sort_cpu')
 plt.plot(counts, sort_times, marker='o', label='sort')

@@ -49,7 +49,7 @@ namespace bitonic_sort {
         }
     };
 
-    inline std::ostream& operator<<(std::ostream& os, command_queue_t& command_queue) {
+    inline std::ostream& operator<<(std::ostream& os, const command_queue_t& command_queue) {
         os << print_blue("command queue");
         return os;
     }

@@ -46,7 +46,7 @@ namespace bitonic_sort {
         }
     };
 
-    inline std::ostream& operator<<(std::ostream& os, device_t& device) {
+    inline std::ostream& operator<<(std::ostream& os, const device_t& device) {
         os << print_blue("device\n");
         os << print_blue("\tCL_DEVICE_MAX_WORK_GROUP_SIZE: ") <<
               print_lcyan(device.get_info<CL_DEVICE_MAX_WORK_GROUP_SIZE>());

@@ -64,7 +64,7 @@ namespace bitonic_sort {
         }
     };
 
-    inline std::ostream& operator<<(std::ostream& os, program_t& program) {
+    inline std::ostream& operator<<(std::ostream& os, const program_t& program) {
         os << print_blue("program\n");
         os << print_blue("\tCL_PROGRAM_SOURCE: ") <<
               print_lcyan(program.get_info<CL_PROGRAM_SOURCE>() << '\n');

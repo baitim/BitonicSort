@@ -61,7 +61,7 @@ namespace bitonic_sort {
         }
     };
 
-    inline std::ostream& operator<<(std::ostream& os, platform_t& platform) {
+    inline std::ostream& operator<<(std::ostream& os, const platform_t& platform) {
         os << print_blue("platform\n");
         os << print_blue("\tCL_PLATFORM_NAME: ") <<
               print_lcyan(platform.get_info<CL_PLATFORM_NAME>() << '\n');

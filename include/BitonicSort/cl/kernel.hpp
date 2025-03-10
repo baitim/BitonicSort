@@ -46,8 +46,9 @@ namespace bitonic_sort {
             cl_handler(clSetKernelArg, obj_, arg_num, sizeof(arg_value), &arg_value);
         }
 
-        void set_memory(int index, memory_t& memory) {
-            cl_handler(clSetKernelArg, obj_, index, sizeof(cl_mem), &memory.get_retain());
+        void set_memory(int index, const memory_t& memory) {
+            cl_mem tmp = memory.get_retain();
+            cl_handler(clSetKernelArg, obj_, index, sizeof(cl_mem), &tmp);
         }
 
         void set_local_memory(cl_uint arg_num, size_t size) {

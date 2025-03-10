@@ -24,7 +24,7 @@ void get_numbers_from_file(std::vector<int>& numbers, std::string_view file_name
 
 TEST(BitonicSort_shuffle, cmp_ete_with_core) {
     std::string file{__FILE__};
-    std::filesystem::path dir = file.substr(0, file.rfind("/"));
+    std::filesystem::path dir = file.substr(0, file.rfind('/'));
     dir = dir / "../end_to_end";
 
     std::filesystem::path answers_path      = dir / "answers/";
@@ -39,14 +39,14 @@ TEST(BitonicSort_shuffle, cmp_ete_with_core) {
         get_numbers_from_file(answer, answers_str[i]);
         get_numbers_from_file(answer_core, answers_core_str[i]);
 
-        ASSERT_EQ(answer.size(), answer_core.size()) << "in test : " << i + 1 << '\n';;
+        ASSERT_EQ(answer.size(), answer_core.size()) << "in test : " << i + 1 << '\n';
         for (int j = 0, end = answer.size(); j < end; ++j)
-            EXPECT_EQ(answer[j], answer_core[j]) << "in test : " << i + 1 << " in number: " << j + 1 << '\n';;
+            EXPECT_EQ(answer[j], answer_core[j]) << "in test : " << i + 1 << " in number: " << j + 1 << '\n';
     }
 }
 
 TEST(BitonicSort_main, simple_test_gpu_1) {
-    std::string dir = std::filesystem::path(executable_path).parent_path().string() + "/";
+    std::string dir = std::filesystem::path(executable_path).parent_path().string() + '/';
     std::string kernel_file = dir + "bitonic_sort.cl";
 
     std::vector<int> data_gpu = {6, 1, 4, 5, 7, 2, 3, 8};

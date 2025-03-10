@@ -12,9 +12,9 @@ answer_dir = tests_dir + "/answers_core"
 tests_dir  = tests_dir + "/tests_in"
 
 os.system("rm -rf " + answer_dir)
-os.system("mkdir " + answer_dir)
+os.system("mkdir "  + answer_dir)
 os.system("rm -rf " + tests_dir)
-os.system("mkdir " + tests_dir)
+os.system("mkdir "  + tests_dir)
 
 for test_num in range(count_tests):
     test_file_name = tests_dir + "/test_" + f'{test_num+1:03}' + ".in"

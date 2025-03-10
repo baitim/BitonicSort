@@ -12,7 +12,7 @@ max_value        = 10 * count_elems_0
 tests_dir  = tests_dir + "/compare_in"
 
 os.system("rm -rf " + tests_dir)
-os.system("mkdir " + tests_dir)
+os.system("mkdir "  + tests_dir)
 
 count_elems = count_elems_0
 for test_num in range(count_tests):

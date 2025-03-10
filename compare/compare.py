@@ -45,7 +45,7 @@ plt.plot(counts, sort_times, marker='o', label='sort')
 plt.title("Times")
 
 plt.xlabel('count')
-plt.ylabel('time, ms')
+plt.ylabel('time, s')
 
 plt.legend()
 plt.savefig(cmp_dir + "/times.png")

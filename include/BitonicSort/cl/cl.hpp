@@ -2,22 +2,19 @@
 
 #include "BitonicSort/common.hpp"
 
-#ifndef CL_HPP_TARGET_OPENCL_VERSION
-#define CL_HPP_MINIMUM_OPENCL_VERSION 120
-#define CL_HPP_TARGET_OPENCL_VERSION 120
-#endif
+#define CL_TARGET_OPENCL_VERSION 200
 
-#define CL_HPP_CL_1_2_DEFAULT_BUILD
-#define CL_HPP_ENABLE_EXCEPTIONS
-
-#include "CL/opencl.hpp"
+#include <CL/cl.h>
 #include <algorithm>
+#include <cstring>
+#include <functional>
+#include <utility>
 #include <vector>
 
 namespace bitonic_sort {
 
     #define check_cl_error(error, func, ...) check_cl_error_(error, #func, __FILE__, __func__);
-    
+
     inline void check_cl_error_(cl_int error, std::string_view func_name,
                                const char* file, const char* caller_func) {
         if (error != CL_SUCCESS) {
@@ -29,9 +26,9 @@ namespace bitonic_sort {
             throw error_t{str_red(ss.str())};
         }
     }
-    
-    #define cl_handler(func, ...) cl_handler_(func, #func, __FILE__, __func__ __VA_OPT__(,) __VA_ARGS__)
-    
+
+    #define cl_handler(func, ...) cl_handler_(func, #func, __FILE__, __func__, ##__VA_ARGS__)
+
     template <typename Func, typename... Args>
     inline auto cl_handler_(Func func, std::string_view func_name, const char* file,
                             const char* caller_func, Args&&... args)

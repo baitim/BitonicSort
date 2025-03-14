@@ -38,9 +38,6 @@ int main(int argc, char* argv[]) try {
     NO_OPT(data4cpu);
     NO_OPT(data4sort);
 
-} catch (cl::Error& error) {
-    std::cout << error.what() << '\n';
-    return 1;
 } catch (const bitonic_sort::error_t& error) {
     std::cout << error.what() << '\n';
     return 1;

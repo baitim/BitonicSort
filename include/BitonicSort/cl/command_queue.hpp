@@ -9,7 +9,9 @@ namespace bitonic_sort {
     public:
         command_queue_t(const context_t& context)
         : detail::wrapper_t<cl_command_queue>(
-            cl_handler(clCreateCommandQueue, context.obj(), context.device().obj(), 0, nullptr)
+            cl_handler(
+                clCreateCommandQueueWithProperties, context.obj(), context.device().obj(), nullptr, nullptr
+            )
         ), context_(context) {}
 
         command_queue_t(const command_queue_t& rhs)

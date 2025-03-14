@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.11)
+if(POLICY CMP0091)
+    cmake_policy(SET CMP0091 NEW)
+endif()
 project(bitonic_sort)
 
 set(CMAKE_CXX_STANDARD 20)

@@ -38,6 +38,9 @@ class graphRecipe(ConanFile):
 
     def layout(self):
         cmake_layout(self)
+        build_type = str(self.settings.build_type)
+        self.folders.build = f"build/{build_type}"
+        self.folders.generators = f"build/{build_type}/generators"
 
     def generate(self):
         deps = CMakeDeps(self)

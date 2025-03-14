@@ -34,10 +34,6 @@ int main(int argc, char* argv[]) try {
     std::cout << bitonic_sort_cpu_time << '\n';
     std::cout << sort_time << '\n';
 
-    NO_OPT(data4gpu);
-    NO_OPT(data4cpu);
-    NO_OPT(data4sort);
-
 } catch (const bitonic_sort::error_t& error) {
     std::cout << error.what() << '\n';
     return 1;

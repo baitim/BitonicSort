@@ -18,7 +18,6 @@ class graphRecipe(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = {"shared": False, "fPIC": True}
-    requires = "opencl-icd-loader/2023.12.14"
     test_requires = "gtest/1.15.0"
 
     # Sources are located in the same place as this recipe, copy them to the recipe

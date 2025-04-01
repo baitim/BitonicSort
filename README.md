@@ -8,10 +8,6 @@
  
  use [storage](https://github.com/baitim/ConanPackages), project = "bitonic_sort", version = "1.0", user = "baitim"
 
-## Requirements
-
-* OpenCL library
-
 ## How to run
 
 1. Clone <br>

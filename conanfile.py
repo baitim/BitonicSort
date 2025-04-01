@@ -20,7 +20,6 @@ class graphRecipe(ConanFile):
     default_options = {"shared": False, "fPIC": True}
     requires = "opencl-icd-loader/2023.12.14"
     test_requires = "gtest/1.15.0"
-    tools_requires = "cmake/3.29.3"
 
     # Sources are located in the same place as this recipe, copy them to the recipe
     exports_sources = "CMakeLists.txt", "src/*", "include/*", "tests/*", "compare/*"

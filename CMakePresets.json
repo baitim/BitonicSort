@@ -1,51 +1,49 @@
 {
-    "version": 3,
-    "cmakeMinimumRequired": {
-      "major": 3,
-      "minor": 11
-    },
-    "configurePresets": [
-      {
-        "name": "debug",
-        "description": "CMake debug config",
-        "binaryDir": "${sourceDir}/build/Debug",
-        "cacheVariables": {
-          "CMAKE_BUILD_TYPE": "Debug",
-          "CMAKE_CXX_FLAGS_DEBUG": "-Wall",
-          "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/Debug/generators/conan_toolchain.cmake"
-        }
-      },
-      {
-        "name": "release",
-        "description": "CMake release config",
-        "binaryDir": "${sourceDir}/build/Release",
-        "cacheVariables": {
-            "CMAKE_BUILD_TYPE": "Release",
-            "CMAKE_CXX_FLAGS_RELEASE": "-Wall -O2",
-            "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/Release/generators/conan_toolchain.cmake"
-        }
-      },
-      {
-        "name": "deploy-debug",
-        "description": "CMake deploy debug config",
-        "generator": "Unix Makefiles",
-        "binaryDir": "${sourceDir}/build/Debug",
-        "cacheVariables": {
-          "CMAKE_BUILD_TYPE": "Debug",
-          "CMAKE_CXX_FLAGS_DEBUG": "-Wall",
-          "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/Debug/generators/conan_toolchain.cmake"
-        }
-      },
-      {
-        "name": "deploy-release",
-        "description": "CMake deploy release config",
-        "generator": "Unix Makefiles",
-        "binaryDir": "${sourceDir}/build/Release",
-        "cacheVariables": {
-            "CMAKE_BUILD_TYPE": "Release",
-            "CMAKE_CXX_FLAGS_RELEASE": "-Wall -O2",
-            "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/Release/generators/conan_toolchain.cmake"
-        }
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 11
+  },
+  "configurePresets": [
+    {
+      "name": "debug",
+      "description": "CMake debug config",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_FLAGS_DEBUG": "-Wall",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/Debug/generators/conan_toolchain.cmake"
       }
-    ]
+    },
+    {
+      "name": "release",
+      "description": "CMake release config",
+      "binaryDir": "${sourceDir}/build/Release",
+      "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Release",
+          "CMAKE_CXX_FLAGS_RELEASE": "-Wall -O2",
+          "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/Release/generators/conan_toolchain.cmake"
+      }
+    },
+    {
+      "name": "deploy-debug",
+      "description": "CMake deploy debug config",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/Debug/generators/conan_toolchain.cmake"
+      }
+    },
+    {
+      "name": "deploy-release",
+      "description": "CMake deploy release config",
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/Release",
+      "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Release",
+          "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/Release/generators/conan_toolchain.cmake"
+      }
+    }
+  ]
 }

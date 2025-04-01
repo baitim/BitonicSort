@@ -24,8 +24,7 @@
     <code>conan install . --build=missing -s build_type=Release</code><br>
 
 5. Build <br>
-    <code>cmake --preset \<os\>-release; cmake --build build/Release</code><br>
-    available os: [linux] [windows]
+    <code>cmake --preset release; cmake --build build/Release</code><br>
 
 6. Run <br>
     <code>./build/Release/src/bitonic_sort</code>

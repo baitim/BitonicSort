@@ -34,7 +34,7 @@ jobs:
       - name: CMake release config
         run: |
           conan install . --build=missing -s build_type=Release
-          cmake --preset release
+          cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 --preset release
           cmake --build build/Release
 
       - name: CMake release test
@@ -43,7 +43,7 @@ jobs:
       - name: CMake debug config
         run: |
           conan install . --build=missing -s build_type=Debug
-          cmake --preset debug
+          cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 --preset debug
           cmake --build build/Debug
 
       - name: CMake debug test

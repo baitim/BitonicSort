@@ -8,6 +8,7 @@
     {
       "name": "debug",
       "description": "CMake debug config",
+      "hidden": false,
       "binaryDir": "${sourceDir}/build/Debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
@@ -18,6 +19,7 @@
     {
       "name": "release",
       "description": "CMake release config",
+      "hidden": false,
       "binaryDir": "${sourceDir}/build/Release",
       "cacheVariables": {
           "CMAKE_BUILD_TYPE": "Release",

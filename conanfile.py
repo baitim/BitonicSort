@@ -1,7 +1,7 @@
 import os
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
-
+from conan.tools.scm import Version
 
 class graphRecipe(ConanFile):
     name = "bitonic_sort"
@@ -45,7 +45,10 @@ class graphRecipe(ConanFile):
     def generate(self):
         deps = CMakeDeps(self)
         deps.generate()
+
         tc = CMakeToolchain(self)
+        if Version(self.dependencies["opencl-icd-loader"].ref.version) <= "2023.12.14":
+            tc.preprocessor_definitions["CMAKE_MINIMUM_REQUIRED_VERSION"] = "3.10"
         tc.generate()
 
         # Delete CMakeUserPresets.json

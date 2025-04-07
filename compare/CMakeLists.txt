@@ -3,7 +3,7 @@ project(compare)
 
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/)
 
-find_package(OpenCL REQUIRED)
+find_package(OpenCL 2.0 REQUIRED)
 
 set(KERNEL_SOURCE     ${CMAKE_SOURCE_DIR}/include/BitonicSort/cl/kernels/bitonic_sort.cl)
 set(KERNEL_OUTPUT_DIR ${CMAKE_BINARY_DIR}/compare)

@@ -1,6 +1,3 @@
-cmake_minimum_required(VERSION 3.11)
-project(compare)
-
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/)
 
 find_package(OpenCL 2.0 REQUIRED)

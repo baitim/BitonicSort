@@ -37,7 +37,7 @@
 
 * Testing
     - End to end & Unit<br>
-        <code>ctest --test-dir build/Release --output-on-failure</code>
+        <code>ctest --test-dir build/Release -C Release --output-on-failure</code>
 
 ## How to compare
 

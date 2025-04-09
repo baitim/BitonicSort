@@ -1,35 +1,40 @@
 import os
 import glob
 import subprocess
+import shutil
 from pathlib import Path
 
-tests_dir = str(Path(__file__).parent)
-build_dir = str(Path.cwd())
+tests_dir = Path(__file__).parent
+build_dir = Path.cwd()
 
-def run(answer_dir, exe_file):
-    os.system("mkdir -p " + answer_dir)
-    file_name = answer_dir + "/answer_" + f'{test_num+1:03}' + ".ans"
-    os.system("touch " + file_name)
-    os.system("echo -n > " + file_name)
-    ans_file = open(file_name, 'w')
-    command = exe_file + " < " + file
-    ans_file.write(subprocess.check_output(command, shell=True).decode("utf-8").rstrip())
-    ans_file.close()
+answer_dir = tests_dir / "answers"
+tests_in_dir = tests_dir / "tests_in"
+
+if answer_dir.exists():
+    shutil.rmtree(answer_dir)
+answer_dir.mkdir(parents=True, exist_ok=True)
 
 exe_suffix = ".exe" if os.name == "nt" else ""
-graph_exe = build_dir + f"/../../src/bitonic_sort{exe_suffix}"
+graph_exe = build_dir / "../../src" / f"bitonic_sort{exe_suffix}"
+graph_exe = graph_exe.resolve()
 
-answer_dir = tests_dir + "/answers"
-tests_dir  = tests_dir + "/tests_in"
+test_files = sorted(Path(tests_in_dir).glob("test_*.in"))
 
-os.system("rm -rf " + answer_dir)
-os.system("mkdir "  + answer_dir)
+for test_num, file_path in enumerate(test_files, start=1):
+    answer_path = answer_dir / f"answer_{test_num:03}.ans"
 
-test_num = 0
-files = list(map(str, glob.glob(tests_dir + "/test_*.in")))
-files.sort()
+    with open(file_path, 'r') as input_file:
+        input_data = input_file.read()
 
-for file in files:
-    run(answer_dir, graph_exe)
-    test_num += 1
-    print("test",  test_num, "passed")
+    result = subprocess.run(
+        str(graph_exe),
+        input=input_data,
+        capture_output=True,
+        text=True,
+        shell=True
+    )
+
+    with open(answer_path, 'w') as output_file:
+        output_file.write(result.stdout.rstrip())
+
+    print("test", test_num, "passed")

@@ -6,7 +6,9 @@ from pathlib import Path
 
 cmp_dir = str(Path(__file__).parent)
 
-cmp_bitonic_sort_exe = cmp_dir + "/../build/Release/compare/cmp_bitonic_sort"
+exe_suffix = ".exe" if os.name == "nt" else ""
+cmp_bitonic_sort_exe = cmp_dir + f"/../build/Release/compare/cmp_bitonic_sort{exe_suffix}"
+
 files = list(map(str, glob.glob(cmp_dir + "/compare_in/test_*.in")))
 files.sort()
 

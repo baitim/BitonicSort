@@ -8,10 +8,6 @@
  
  use [storage](https://github.com/baitim/ConanPackages), project = "bitonic_sort", version = "1.0", user = "baitim"
 
-## Requirements
-
-* OpenCL driver library
-
 ## How to run
 
 1. Clone <br>
@@ -31,7 +27,8 @@
     <code>cmake --preset release; cmake --build build/Release --config release</code><br>
 
 6. Run <br>
-    <code>./build/Release/src/bitonic_sort</code>
+    Linux   <code>./build/Release/src/bitonic_sort</code><br>
+    Windows <code>./build/Release/src/bitonic_sort.exe</code>
 
 ## How to test
 

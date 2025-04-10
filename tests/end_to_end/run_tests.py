@@ -15,8 +15,8 @@ if answer_dir.exists():
 answer_dir.mkdir(parents=True, exist_ok=True)
 
 exe_suffix = ".exe" if os.name == "nt" else ""
-graph_exe = build_dir / "../../src" / f"bitonic_sort{exe_suffix}"
-graph_exe = graph_exe.resolve()
+bitonic_sort_exe = build_dir / "../../src" / f"bitonic_sort{exe_suffix}"
+bitonic_sort_exe = bitonic_sort_exe.resolve()
 
 test_files = sorted(Path(tests_in_dir).glob("test_*.in"))
 
@@ -27,7 +27,7 @@ for test_num, file_path in enumerate(test_files, start=1):
         input_data = input_file.read()
 
     result = subprocess.run(
-        str(graph_exe),
+        str(bitonic_sort_exe),
         input=input_data,
         capture_output=True,
         text=True,

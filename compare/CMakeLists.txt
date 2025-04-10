@@ -13,3 +13,7 @@ target_sources(cmp_bitonic_sort
     BASE_DIRS ${INCLUDE_DIR}
 )
 target_link_libraries(cmp_bitonic_sort PRIVATE OpenCL::OpenCL)
+set_target_properties(cmp_bitonic_sort PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG   "${CMAKE_CURRENT_BINARY_DIR}"
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}"
+)

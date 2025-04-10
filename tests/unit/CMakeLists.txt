@@ -14,6 +14,10 @@ target_sources(unit_bitonic_sort
     BASE_DIRS ${INCLUDE_DIR}
 )
 target_link_libraries(unit_bitonic_sort PRIVATE GTest::GTest OpenCL::OpenCL)
+set_target_properties(unit_bitonic_sort PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG   "${CMAKE_CURRENT_BINARY_DIR}"
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}"
+)
 
 set(RUN_TESTS ./unit_bitonic_sort --gtest_color=yes)
 add_test(

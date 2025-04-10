@@ -13,6 +13,10 @@ target_sources(bitonic_sort
     BASE_DIRS ${INCLUDE_DIR}
 )
 target_link_libraries(bitonic_sort PRIVATE OpenCL::OpenCL)
+set_target_properties(bitonic_sort PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG   "${CMAKE_CURRENT_BINARY_DIR}"
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}"
+)
 
 include(GNUInstallDirs)
 

@@ -7,7 +7,7 @@ from pathlib import Path
 tests_dir = Path(__file__).parent
 build_dir = Path.cwd()
 
-answer_dir = tests_dir / "answers"
+answer_dir   = tests_dir / "answers"
 tests_in_dir = tests_dir / "tests_in"
 
 if answer_dir.exists():

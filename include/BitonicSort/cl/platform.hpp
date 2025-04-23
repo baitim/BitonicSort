@@ -14,19 +14,15 @@ namespace bitonic_sort {
             std::vector<cl_platform_id> platforms(num_platforms);
             cl_handler(clGetPlatformIDs, num_platforms, platforms.data(), nullptr);
 
-            cl_uint num_devices;
             for (auto platform : platforms) {
-                cl_int error = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 0, nullptr, &num_devices);
-                if (error == CL_DEVICE_NOT_FOUND)
-                    cl_handler(clGetDeviceIDs, platform, CL_DEVICE_TYPE_CPU, 0, nullptr, &num_devices);
-                else
-                    check_cl_error(error, clGetDeviceIDs);
-                
-                if (num_devices > 0)
+                cl_uint num_devices = 0;
+                if (clGetDeviceIDs(platform, CL_DEVICE_TYPE_ALL, 0, nullptr, &num_devices) == CL_SUCCESS
+                    && num_devices > 0) {
                     return platform;
+                }
             }
 
-            throw error_t{str_red("No platform with GPU devices found")};
+            throw error_t{str_red("No platform with GPU/CPU devices found")};
         }
 
     public:

@@ -6,14 +6,21 @@ namespace bitonic_sort {
     class device_t final : public detail::wrapper_t<cl_device_id> {
         platform_t platform_;
 
-    public:
-        device_t() {
-            cl_int error = clGetDeviceIDs(platform_.obj(), CL_DEVICE_TYPE_GPU, 1, &obj_, nullptr);
-            if (error == CL_DEVICE_NOT_FOUND)
-                cl_handler(clGetDeviceIDs, platform_.obj(), CL_DEVICE_TYPE_CPU, 1, &obj_, nullptr);
-            else
-                check_cl_error(error, clGetDeviceIDs);
+    private:
+        cl_device_id select_device() {
+            cl_uint num_devices = 0;
+            cl_handler(clGetDeviceIDs, platform_.obj(), CL_DEVICE_TYPE_ALL, 0, nullptr, &num_devices);
+
+            if (num_devices == 0)
+                throw error_t{str_red("No devices found on this platform")};
+
+            std::vector<cl_device_id> devices(num_devices);
+            cl_handler(clGetDeviceIDs, platform_.obj(), CL_DEVICE_TYPE_ALL, num_devices, devices.data(), nullptr);
+            return devices[0];
         }
+
+    public:
+        device_t() { obj_ = select_device(); }
 
         device_t(const device_t& rhs)
         : detail::wrapper_t<cl_device_id>(rhs.obj_), platform_(rhs.platform_) {}

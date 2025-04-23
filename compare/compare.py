@@ -13,8 +13,8 @@ files = list(map(str, glob.glob(cmp_dir + "/compare_in/test_*.in")))
 files.sort()
 
 name_out_file = cmp_dir + "/compare.out"
-os.system("touch " + name_out_file)
-os.system("echo -n > " + name_out_file)
+Path(name_out_file).touch()
+open(name_out_file, 'w').close()
 out_file = open(name_out_file, 'w')
 out_file.write(f"{'file':<20}{'count':<10}{'gpu_time':<12}{'cpu_time':<12}{'sort_time':<12}\n")
 

@@ -1,5 +1,6 @@
 import os
 import random
+import shutil
 from pathlib import Path
 
 tests_dir = str(Path(__file__).parent)
@@ -11,10 +12,10 @@ max_value   = count_elems * 2
 answer_dir = tests_dir + "/answers_core"
 tests_dir  = tests_dir + "/tests_in"
 
-os.system("rm -rf " + answer_dir)
-os.system("mkdir "  + answer_dir)
-os.system("rm -rf " + tests_dir)
-os.system("mkdir "  + tests_dir)
+for directory in [answer_dir, tests_dir]:
+    if os.path.exists(directory):
+        shutil.rmtree(directory)
+    os.makedirs(directory, exist_ok=True)
 
 for test_num in range(count_tests):
     test_file_name = tests_dir + "/test_" + f'{test_num+1:03}' + ".in"

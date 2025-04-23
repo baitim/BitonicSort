@@ -23,10 +23,7 @@ void get_numbers_from_file(std::vector<int>& numbers, std::string_view file_name
 }
 
 TEST(BitonicSort_shuffle, cmp_ete_with_core) {
-    std::string file{__FILE__};
-    std::filesystem::path dir = file.substr(0, file.rfind('/'));
-    dir = dir / "../end_to_end";
-
+    std::filesystem::path dir = std::filesystem::path(__FILE__).parent_path() / ".." / "end_to_end";
     std::filesystem::path answers_path      = dir / "answers/";
     std::filesystem::path answers_core_path = dir / "answers_core/";
 

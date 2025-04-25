@@ -16,13 +16,13 @@ int main(int argc, char* argv[]) try {
     std::vector<int> data4gpu, data4cpu, data4sort;
     data4gpu = data4cpu = data4sort = data;
 
-    using vector_int_it = std::vector<int>::iterator;
+    using vector_int_t = std::vector<int>;
     long double bitonic_sort_gpu_time = get_time(
-        bitonic_sort::bitonic_sort_gpu<vector_int_it>, data4gpu.begin(), data4gpu.end(), kernel_file
+        bitonic_sort::bitonic_sort_gpu<vector_int_t>, data4gpu, kernel_file
     );
 
     long double bitonic_sort_cpu_time = get_time(
-        bitonic_sort::bitonic_sort_cpu<vector_int_it>, data4cpu.begin(), data4cpu.end()
+        bitonic_sort::bitonic_sort_cpu<vector_int_t>, data4cpu
     );
 
     long double sort_time = get_time(

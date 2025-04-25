@@ -49,8 +49,8 @@ TEST(BitonicSort_main, simple_test_gpu_1) {
     std::vector<int> data_gpu = {6, 1, 4, 5, 7, 2, 3, 8};
     std::vector<int> data_cpu = data_gpu;
 
-    bitonic_sort::bitonic_sort_gpu(data_gpu.begin(), data_gpu.end(), kernel_file);
-    bitonic_sort::bitonic_sort_cpu(data_cpu.begin(), data_cpu.end());
+    bitonic_sort::bitonic_sort_gpu(data_gpu, kernel_file);
+    bitonic_sort::bitonic_sort_cpu(data_cpu);
 
     std::vector<int> answer = {1, 2, 3, 4, 5, 6, 7, 8};
     ASSERT_EQ(data_gpu, answer);

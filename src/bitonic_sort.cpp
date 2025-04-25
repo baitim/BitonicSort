@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) try {
     std::vector<int> data;
     bitonic_sort::read_data(std::cin, std::back_inserter(data));
 
-    bitonic_sort::bitonic_sort_gpu(data.begin(), data.end(), kernel_file);
+    bitonic_sort::bitonic_sort_gpu(data, kernel_file);
 
     for (auto i : data)
         std::cout << i << ' ';

@@ -4,8 +4,8 @@
 int main(int argc, char* argv[]) try {
 
     std::filesystem::path exe_path(argv[0]);
-    std::string dir = exe_path.parent_path().string() + '/';
-    std::string kernel_file = dir + "bitonic_sort.cl";
+    std::filesystem::path kernel_file_path = exe_path.parent_path() / "bitonic_sort.cl";
+    std::string kernel_file = kernel_file_path.string();
 
     std::vector<int> data;
     bitonic_sort::read_data(std::cin, std::back_inserter(data));

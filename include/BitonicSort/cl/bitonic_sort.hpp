@@ -41,7 +41,7 @@ namespace bitonic_sort {
 
     template <sortable_elem_t ElemT>
     inline void resize2pow2(std::vector<ElemT>& data, const ElemT& filling_elem) {
-        int new_size = std::pow(2, static_cast<int>(std::log2(data.size() - 1) + 1));
+        int new_size = std::bit_ceil(data.size());
         data.resize(new_size, filling_elem);
     }
 
